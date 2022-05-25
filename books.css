@@ -92,3 +92,16 @@ button{
     bottom: 0;
     background-color: rgba(0, 0, 0, .5);
 }
+#brought{
+    border:1px solid black;
+    margin-top:2px;
+    margin-bottom:2px;
+    display:flex;
+    flex-direction: column;
+}
+#dragbtn{
+    width:auto;
+    height:auto;
+    top:0;
+    left:0;
+}
