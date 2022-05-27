@@ -1,6 +1,7 @@
 'use strict';
 const orderForm=document.createElement('div');
 orderForm.classList.add('order_form');
+orderForm.id='orderform';
 orderForm.innerHTML=`
      <form class='form_order' action='' method='myform'>
      <h3>Confirm Order</h3>
@@ -125,11 +126,34 @@ orderForm.innerHTML=`
      id='pen'>
      </div>
      </fieldset>
-     <button class="complete_button" type="submit" disabled>
+     <button id="complete_button" type="submit" disabled>
      Complete
    </button>
-     </form>
+     </form> 
+     
 `
+//makes sure you can only choose two checkboxes
+$(document).ready(function () {
+    $("input[name='gift']").change(function () {
+       var maxAllowed = 2;
+       var cnt = $("input[name='gift']:checked").length;
+       if (cnt > maxAllowed) 
+       {
+          $(this).prop("checked", "");
+          alert('Select maximum ' + maxAllowed + ' Gifts!');
+      }
+   });
+ });
+ 
+// let page=document.createElement('div');
+// page.id='page';
+/*let goback=document.getElementById('gobackbtn');
+goback.onclick=function(){
+    orderForm.remove();
+    let wrap=documnet.getElementById('wrapper');
+    document.getElementById('body').appendChild(wrap);
+}*/
+  
 
 let header=document.createElement('div');
 header.id='header';
@@ -141,12 +165,21 @@ orderBtn.id='order';
 let price=document.createElement('div');
 //price.innerHTML=`Total: ${sum} Dollars`
 //price.id='price';
+let bag;
 document.getElementById('draggable').appendChild(header);
 document.getElementById('header').appendChild(heading);
 document.getElementById('header').appendChild(orderBtn);
 //document.getElementById('header').appendChild(price);
+
 orderBtn.onclick=function(){
-  document.getElementById('wrapper').appendChild(orderForm);
+    if(bag.hasChildNodes()){
+  document.getElementById('wrapper').remove();
+  document.getElementById('body').appendChild(orderForm);
+
+    }else {
+        alert('cart is empty')
+    }
+
 
 }
 let arr=[];
@@ -169,7 +202,7 @@ $.getJSON('books.json', function(json){
     price.id='price';
     document.getElementById('draggable').appendChild(price);
     price.innerHTML=`Total: ${sum} Dollars`
-    let bag=document.createElement('div');
+     bag=document.createElement('div');
     bag.id='cart';
     document.getElementById('wrapper').appendChild(bag);
 let sth=[];
@@ -256,7 +289,15 @@ let sth=[];
 //    let bag=document.createElement('div');
 //    bag.id='cart';
 //    document.getElementById('wrapper').appendChild(bag);
-  });
+/*let cashs=document.querySelector('.cash');
+let cards=document.querySelector('.card')
+if(cashs.checked || cards.checked) {
+    document.getElementById('order-set').style.borderColor='black';
+  }else{
+    document.getElementById('order-set').style.borderColor='red';
+    
+  }*/
 
+  });
 
   
