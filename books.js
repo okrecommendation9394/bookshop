@@ -1,7 +1,7 @@
 'use strict';
 const orderForm=document.createElement('div');
 orderForm.classList.add('order_form');
-orderForm.id='orderform';
+orderForm.id='orderForm';
 orderForm.innerHTML=`
      <form class='form_order' action='' method='myform'>
      <h3>Confirm Order</h3>
@@ -126,14 +126,10 @@ orderForm.innerHTML=`
      id='pen'>
      </div>
      </fieldset>
-     <button id="complete_button" type="submit" disabled>
-     Complete
-   </button>
      </form> 
-     
 `
 //makes sure you can only choose two checkboxes
-$(document).ready(function () {
+/*$(document).ready(function () {
     $("input[name='gift']").change(function () {
        var maxAllowed = 2;
        var cnt = $("input[name='gift']:checked").length;
@@ -143,7 +139,7 @@ $(document).ready(function () {
           alert('Select maximum ' + maxAllowed + ' Gifts!');
       }
    });
- });
+ });*/
  
 // let page=document.createElement('div');
 // page.id='page';
@@ -153,9 +149,11 @@ goback.onclick=function(){
     let wrap=documnet.getElementById('wrapper');
     document.getElementById('body').appendChild(wrap);
 }*/
+
+
   
 
-let header=document.createElement('div');
+let header=document.createElement('header');
 header.id='header';
 let heading=document.createElement('h1');
 heading.innerHTML='BookShop';
@@ -176,19 +174,26 @@ orderBtn.onclick=function(){
   document.getElementById('wrapper').remove();
   document.getElementById('body').appendChild(orderForm);
 
-    }else {
+  let complete=document.createElement('button');
+complete.id='complete_button';
+complete.type='submit'
+document.getElementById('orderForm').appendChild(complete);
+complete.innerHTML='Complete'
+}else {
         alert('cart is empty')
     }
-
-
 }
+let input=[];
+orderForm.addEventListener('click', function(){
+  orderForm.remove();
+})
 let arr=[];
 $.getJSON('books.json', function(json){
     for(let key in json){
       if(json.hasOwnProperty(key)){
         let item = json[key];
         arr.push({
-          'image':item['imageLink'],
+          'image':`${item['imageLink']}`,
           'name':item['title'],
           'author':item['author'],
           'price': item['price'],
@@ -197,6 +202,7 @@ $.getJSON('books.json', function(json){
       }
   
     }
+    console.log(arr[2]['image'])
     let sum=0;
     let price=document.createElement('div');
     price.id='price';
@@ -204,18 +210,57 @@ $.getJSON('books.json', function(json){
     price.innerHTML=`Total: ${sum} Dollars`
      bag=document.createElement('div');
     bag.id='cart';
+ //   bag.innerHTML=`Cart`
     document.getElementById('wrapper').appendChild(bag);
+    
 let sth=[];
 
     for(let i=0; i<10; i++){
         let elem=document.createElement('div');
         elem.classList.add('each');
+        elem.draggable=true;
         elem.innerHTML=`
         <div>${arr[i]['name']}</div>
         <div>${arr[i]['author']}</div>
         <div>${arr[i]['price']} Dollars</div>
         <img src=${arr[i]['image']}>
-        `
+       `
+    const elements=document.querySelectorAll('.each');
+      
+        elem.addEventListener('dragstart', ()=>{
+          elem.classList.add('dragging');
+        })
+        elem.addEventListener('dragend',()=>{
+          elem.classList.remove('dragging');
+          sum+=sth[i]['price']
+          price.innerHTML=`Total: ${sum} Dollars`;
+         /* bag.innerHTML=`<div class='dragStyle'>
+          ${sth[i]['author']}<br>${sth[i]['name']}<br>${sth[i]['price']} Dollars
+          </div>`*/
+          let newBtn=document.createElement('button');
+          newBtn.innerHTML='&times';
+          let arraymember=document.createElement('div')
+          arraymember.innerHTML=`<div>${sth[i]['name']}<br>${sth[i]['author']}<br>${sth[i]['price']} Dollars</div>`;
+          arraymember.id='arraymember';
+          bag.appendChild(arraymember).append(newBtn);;
+         // document.getElementById('arraymember').appendChild(newBtn);
+        //  bag.classList.add('dragStyle');
+          
+          newBtn.onclick=function(){
+            document.getElementById('arraymember').remove();
+            sum-=sth[i]['price'];
+            price.innerHTML=`Total: ${sum} Dollars`; 
+          }
+        })
+      
+         
+      
+        bag.addEventListener("dragover",e=>{
+          console.log('drag over');
+          e.preventDefault();
+          const dragg=document.querySelector(".dragging");
+          //bag.appendChild(dragg);
+        })
         sth.push({'name':arr[i]['name'],
     'author':arr[i]['author'],
     'price':arr[i]['price']});
@@ -266,8 +311,9 @@ let sth=[];
          /* let draggedBtn=document.createElement('button');
           draggedBtn.id='dragbtn';*/
           draggedBtn.innerHTML='&times';
-          document.getElementById('brought').appendChild(draggedBtn);
-          document.getElementById('brought').appendChild(dragged);
+          brought.appendChild(dragged).append(draggedBtn);
+        /*  document.getElementById('brought').appendChild(draggedBtn);
+          document.getElementById('brought').appendChild(dragged);*/
           draggedBtn.onclick=function(){
               brought.remove();
               dragged.remove();
@@ -297,7 +343,5 @@ if(cashs.checked || cards.checked) {
     document.getElementById('order-set').style.borderColor='red';
     
   }*/
-
   });
-
   
