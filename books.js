@@ -178,7 +178,13 @@ orderBtn.onclick=function(){
 complete.id='complete_button';
 complete.type='submit'
 document.getElementById('orderForm').appendChild(complete);
-complete.innerHTML='Complete'
+complete.innerHTML='Complete';
+complete.addEventListener('click', function(){
+  orderForm.remove();
+ let thanks=document.createElement('div');
+  thanks.innerHTML=`thank you for purchase`;
+  document.getElementById('body').appendChild(thanks);
+})
 }else {
         alert('cart is empty')
     }
